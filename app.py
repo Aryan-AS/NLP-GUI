@@ -139,11 +139,23 @@ class NLPApp:
         meow_but.pack(pady=(10,10))
     
     def do_sentiment_analysis(self):
-        cute = self.sentiment_input.get()
-        result = self.apo.sentiment_analysis(cute)
-        print(result)
+     text = self.sentiment_input.get()
+     result = self.apo.sentiment_analysis(text)  # Call to your API
+     
+     # Assuming result format is [{'id': '1', 'predictions': [{'prediction': 'negative', 'probability': 0.99889}]}]
+     if result and isinstance(result, list) and 'predictions' in result[0]:
+         predictions = result[0]['predictions']
+         txt = ''
+         for pred in predictions:
+             prediction = pred['prediction']
+             probability = pred['probability']
+             txt += f"{prediction} -> {probability:.5f}\n"
+         self.sentiment_result['text'] = txt
+     else:
+         self.sentiment_result['text'] = "No valid predictions found."
+     
+     print(self.sentiment_result['text']) 
     
-
 
 
         
@@ -151,4 +163,3 @@ class NLPApp:
          
         
 nlp = NLPApp()
-
